@@ -31,15 +31,15 @@ admins
                         <div class="d-flex justify-content-end align-items-center">
                             <!-- Navbar Search Start -->
                             <div class="navbar--search">
-                                <form action="{{ route('admins.index') }}" action="get">
-                                    <input type="search" name="search" value="{{ request() ->search }}" class="form-control" placeholder="Search Something..." >
+                                <form action="{{ route('dashboard.admins.index') }}" action="get">
+                                    <input type="search" name="search" value="{{ request() ->search }}" class="form-control" placeholder="Search Something...">
                                     <button class="btn-link"><i class="fa fa-search"></i></button>
                                 </form>
                             </div>
                             <!-- Navbar Search End -->
                             <div class="">
                                 @if (auth () -> user () -> hasPermission ('admins_create'))
-                                <a href="{{ route ('admins.create') }}" class="btn btn-rounded btn-warning fw--600 ">Add New User</a>
+                                <a href="{{ route ('dashboard.admins.create') }}" class="btn btn-rounded btn-warning fw--600 ">Add New User</a>
                                 @else
                                 <a href="#" class="btn btn-rounded btn-warning fw--600 disabled">Add New User</a>
                                 @endif
@@ -78,7 +78,7 @@ admins
                         <!-- <td><a href="#" class="btn-link"> <img src="assets/img/products/thumb-80x60.jpg" alt=""> </a></td> -->
                         <td>{{ $admin -> first_name }} {{ $admin -> last_name }}</td>
                         <td> {{ $admin -> email }} </td>
-                        <td><img src="{{ $admin -> image_path }}" width="80" class="thumbnil" alt=""></td>
+                        <td><img src="{{ $admin -> image_path }}" width="80" class="thumbnail" alt=""></td>
                         <td> {{ $admin -> created_at }} </td>
                         <td>
                             <div class="dropleft">
@@ -86,15 +86,16 @@ admins
                                 <a href="#" class="btn-link" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></a>
                                 <div class="dropdown-menu">
                                     @if (auth() -> user () -> hasPermission ('admins_update'))
-                                    <a href="{{ route('admins.edit', $admin -> id ) }}" class="dropdown-item">Edit</a>
+                                    <a href="{{ route('dashboard.admins.edit', $admin -> id) }}" class="dropdown-item">Edit</a>
                                     @else
-                                    <a href="#" class="dropdown-item disabled">Edit</a>
+                                   
+                                    <button type="submit" href="#" disabled class="dropdown-item">Edit</button>
                                     @endif
                                     @if (auth() -> user () ->hasPermission ('admins_delete'))
-                                    <form action="{{ route('admins.destroy', $admin -> id) }}" method="post">
+                                    <form action="{{ route('dashboard.admins.destroy', $admin -> id) }}" method="post">
                                         @csrf
                                         @method('delete')
-                                        <button type="submit"  class="dropdown-item delete">Delete</button>
+                                        <button type="submit" class="dropdown-item delete">Delete</button>
                                     </form>
                                     @else
                                     <button type="submit" href="#" disabled class="dropdown-item">Delete</button>

@@ -5,11 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Admin\AdminReq;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
-use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -24,12 +22,17 @@ class AdminController extends Controller
     public function index(Request $request)
     {
 
-        $data = Admin::whereRoleIs('admin')->when($request->search, function ($query) use ($request) {
-            return $query->where('first_name', 'like', '%' . $request->search . '%')
-                ->orWhere('last_name', 'like', '%' . $request->search . '%');
-        })->latest()->paginate(10);
+        $data = Admin::whereRoleIs('admin')->where(function ($q) use ($request) {
 
-        // return $data;
+            return $q->when($request->search, function ($query) use ($request) {
+
+                return $query
+                    ->where('first_name', 'like', '%' . $request->search . '%')
+
+                    ->orWhere('last_name', 'like', '%' . $request->search . '%');
+            });
+
+        })->latest()->paginate(10);
 
         return view('dashboard.admins.index', compact('data'));
     } // end of index
@@ -42,12 +45,12 @@ class AdminController extends Controller
     public function store(AdminReq $request)
     {
         // return $request;
-        $request_data = $request->except(['password', 'permissions','image']);
+        $request_data = $request->except(['password', 'permissions', 'image']);
 
-        if ($request -> image) {
-            Image::make($request -> image) ->resize(300, null, function ($constraint) {
+        if ($request->image) {
+            Image::make($request->image)->resize(300, null, function ($constraint) {
                 $constraint->aspectRatio();
-            }) -> save(public_path('uploads/users/' . $request -> image ->hashName()));
+            })->save(public_path('uploads/users/' . $request->image->hashName()));
 
             $request_data['image'] = $request->image->hashName();
         }
@@ -62,7 +65,7 @@ class AdminController extends Controller
 
         session()->flash('success', 'Added successfully');
 
-        return redirect()->route('admins.index');
+        return redirect()->route('dashboard.admins.index');
     } // end of store
 
     public function edit(Admin $admin)
@@ -77,29 +80,48 @@ class AdminController extends Controller
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email',
+            'image' => 'image',
+            'permissions' => 'required|min:1',
 
         ]);
 
-        $request_data = $request->except(['permissions']);
+        $request_data = $request->except(['permissions', 'image']);
+
+        if ($request->image) {
+
+            if ($admin->image != 'default.png') {
+
+                Storage::disk('public_upload')->delete('/users/' . $admin->image);
+            }
+
+            Image::make($request->image)
+                ->resize(300, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })
+                ->save(public_path('uploads/users/' . $request->image->hashName()));
+
+            $request_data['image'] = $request->image->hashName();
+        }
 
         $admin->update($request_data);
 
         $admin->syncPermissions($request->permissions);
 
-        session()->flash('success', 'Edit successfully');
+        session()->flash('success', 'Updated successfully');
 
-        return redirect()->route('admins.index');
+        return redirect()->route('dashboard.admins.index');
     } // end pf update
 
     public function destroy(Admin $admin)
     {
-        if ($admin -> image !== "default.png") {
-            Storage::disk('public_upload') -> delete('/users/'. $admin -> image);
+        if ($admin->image !== "default.png") {
+            Storage::disk('public_upload')->delete('/users/' . $admin->image);
         }
         $admin->delete();
 
         session()->flash('success', 'Delete has been successfully');
 
-        return redirect()->route('admins.index');
-    }
-}
+        return redirect()->route('dashboard.admins.index');
+    } // end of destroy
+
+} // end of controller

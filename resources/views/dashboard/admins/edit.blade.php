@@ -33,7 +33,7 @@ admins
         </div>
 
         <div class="panel">
-        @if (count($errors) > 0)
+            @if (count($errors) > 0)
             <div class="alert alert-danger">
                 <strong>Whoops!</strong> There were some problems with your input.<br><br>
                 <ul>
@@ -45,21 +45,21 @@ admins
             @endif
 
             @php
-                 $models = ['admins','categories', 'products','test'];
+            $models = ['admins','categories', 'products','test'];
             @endphp
 
 
-            <form method="post" action="{{ route('admins.update', $admin -> id) }}">
-                @csrf
-                @method('put')
-                <!-- Records List Start -->
-                <div class="col-md-12 mx-auto">
-                    <!-- Panel Start -->
-                    <div class="panel">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Edit New User</h3>
-                        </div>
+            <!-- Records List Start -->
+            <div class="col-md-12 mx-auto">
+                <!-- Panel Start -->
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Edit User</h3>
+                    </div>
 
+                    <form method="post" action="{{ route('dashboard.admins.update', $admin -> id) }}" enctype="multipart/form-data">
+                        @csrf
+                        @method('put')
 
                         <div class="panel-content">
                             <div class="row">
@@ -85,6 +85,18 @@ admins
                                             <span class="label-text">Email Address</span>
                                             <input type="email" name="email" value="{{ $admin->email }}" class="form-control">
                                         </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <span class="label-text ">Photo</span>
+
+                                        <div class="">
+                                            <label class="custom-file">
+                                                <input type="file" name="image" class="custom-file-input">
+                                                <span class="custom-file-label">Choose File</span>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -150,10 +162,10 @@ admins
                             </div>
                         </div>
                         <!-- Panel End -->
-                    </div>
-                    <!-- Records List End -->
-            </form>
-        </div>
+                    </form>
+                </div>
+                <!-- Records List End -->
+            </div>
     </section>
 </section>
 <!-- Main Content End -->

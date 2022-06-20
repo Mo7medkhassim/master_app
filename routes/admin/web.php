@@ -2,10 +2,11 @@
 
 
 
-use App\Http\Controllers\Admin\HomeController;
-
 use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\HomeController;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,41 +22,55 @@ use Illuminate\Support\Facades\Route;
 
 // Route::group(['prefix' => 'dashboard', 'name' => 'dashboard.'], function () {
 
-Route::name('dashboard.')->prefix('dashboard')->group(function () {
+Route::group(
+    [
+        'prefix' => LaravelLocalization::setLocale(),
+        'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
+    ],
+    function () { 
+        Route::name('dashboard.')->prefix('dashboard')->group(function () {
 
-    Route::group(['namespace' => 'Auth'], function () {
-        Route::get('/login',  'LoginController@login');
-    });
+            Route::group(['namespace' => 'Auth', 'middleware' => ['guest']], function () {
+                Route::get('/login',  'LoginController@login');
+            });
+        
+        
+            Route::group(['middleware' => 'signGuard:admin'], function () {
+        
+                //
+                Route::match(['get', 'post'], '/home', 'HomeController@index')->name('home');
+        
+                // Admin routes
+                Route::resource('admins', 'AdminController');
+        
+        
+                // Role routes
+                Route::resource('roles', 'RoleController')->except(['show']);
+        
+                // Category routes
+                Route::resource('categories', 'CategoryController')->except(['show']);
+        
+                // product routes
+                Route::resource('products', 'ProductController')->except(['show']);
+        
+                // Invoice Route
+                Route::resource('invoice', 'InvoicesController')->except(['show']);
+            });
+        });
+        
 
+    }
+);
 
-    Route::group(['middleware' => 'signGuard:admin'], function () {
-
-        //
-        Route::match(['get', 'post'], '/home', 'HomeController@index')->name('dashboard.home');
-
-        // Admin routes
-        Route::resource('admins', 'AdminController');
-
-
-        // Role routes
-        Route::resource('roles', 'RoleController');
-
-        // product routes
-        Route::resource('products', 'ProductController');
-
-        // Invoice Route
-        Route::resource('invoice', 'InvoicesController');
-    });
-});
 
 
 Route::resource('admin/section', SectionController::class);
 
+Auth::routes(['register' => false]);
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes(['register' => false]);
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

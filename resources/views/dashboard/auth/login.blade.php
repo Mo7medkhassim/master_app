@@ -2,17 +2,25 @@
 
 @section('content')
 
+<style>
+    @media (max-width: 600px) {
+            .m-account--content-w {
+                height: 300px
+            }
+        }
+</style>
+
 <div class="m-account-w" data-bg-img="assets/img/account/wrapper-bg.jpg">
     <div class="m-account">
         <div class="row no-gutters">
             <div class="col-md-6">
                 <!-- Login Content Start -->
-                <div class="m-account--content-w" data-bg-img="assets/img/account/content-bg.jpg">
-                    <div class="m-account--content">
+                <div class="m-account--content-w" data-bg-img="{{ asset('dashboard_asset/img/account/content-bg.jpg') }}">
+                    <!-- <div class="m-account--content">
                         <h2 class="h2">Don't have an account?</h2>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                         <a href="register.html" class="btn btn-rounded">Register Now</a>
-                    </div>
+                    </div> -->
                 </div>
                 <!-- Login Content End -->
             </div>
@@ -57,18 +65,18 @@
                                 <button type="submit" class="btn btn-rounded btn-info">Login</button>
                             </div>
 
-                            <div class="m-account--alt">
+                            <!-- <div class="m-account--alt">
                                 <p><span>OR LOGIN WITH</span></p>
 
                                 <div class="btn-list">
                                     <a href="#" class="btn btn-rounded btn-warning">Facebook</a>
                                     <a href="#" class="btn btn-rounded btn-warning">Google</a>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="m-account--footer">
+                            <!-- <div class="m-account--footer">
                                 <p>&copy; 2018 ThemeLooks</p>
-                            </div>
+                            </div> -->
                         </form>
                     </div>
                 </div>

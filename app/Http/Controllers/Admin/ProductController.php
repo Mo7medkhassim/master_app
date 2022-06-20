@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -16,76 +20,142 @@ class ProductController extends Controller
         // $this->middleware('permission:product-delete', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::latest()->paginate(5);
-        return view('admin.products.index', compact('products'));
-    }
+
+        $categories = Category::all();
+
+        $products = Product::when($request -> search, function ($q) use ($request) {
+
+                return $q -> whereTranslationLike('name', '%'. $request -> search . '%');  })
+
+                 -> when($request -> category_id, function($q) use ($request) {
+
+                    return $q -> where ('category_id', $request -> category_id);
+
+               
+        }) -> latest () -> paginate (5);
+
+        return view('dashboard.products.index', compact('categories','products'));
+
+    }  // end of index
 
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
     public function create()
     {
-        //
-    }
+        $categories = Category::all();
+        return view('dashboard.products.create', compact ('categories'));
+    } // end of creates
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    
     public function store(Request $request)
     {
-        //
-    }
+        
+        $rules = [
+            'category_id' => 'required',
+        ];
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        foreach (config('translatable.locales') as $locale) {
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+            $rules += [$locale . '.name' => 'required|unique:product_translations,name'];
+            $rules += [$locale . '.description' => 'required'];
+        }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        $rules += [
+            'purchase_price' => 'required',
+            'sale_price' => 'required',
+            'stock' => 'required',
+        ];
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+        $request->validate($rules);
+
+        $request_data = $request->except(['image']);
+
+        if ($request->image) {
+
+            Image::make($request->image)->resize(400, null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save(public_path('uploads/products/' . $request->image->hashName()));
+
+            $request_data['image'] = $request->image->hashName();
+        }
+
+
+        Product::create($request_data);
+
+        session() -> flash('success', 'Added successfully');
+
+        return redirect()->route('dashboard.products.index');
+
+    } // end of store
+
+   
+    public function edit(Product $product)
     {
-        //
-    }
+        $categories = Category::all();
+        return view('dashboard.products.edit', compact('categories','product'));
+    } // end of edit
+
+   
+    public function update(Request $request, Product $product)
+    {
+        $rules = [
+            'category_id' => 'required',
+        ];
+
+        foreach (config('translatable.locales') as $locale) {
+
+             $rules += [$locale . '.name' => 
+             ['required',
+                Rule::unique('product_translations', 'name') -> ignore($product -> id , 'product_id')]];
+             $rules += [$locale . '.description' => 'required'];
+        }
+
+        $rules += [
+            'purchase_price' => 'required',
+            'sale_price' => 'required',
+            'stock' => 'required',
+        ];
+
+        $request->validate($rules);
+
+        $request_data = $request->except(['image']);
+
+        if ($request->image) {
+
+            if ($product->image != 'default.png') {
+
+                Storage::disk('public_upload')->delete('/products/' . $product->image);
+            }
+
+            Image::make($request->image)
+                ->resize(400, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })
+                ->save(public_path('uploads/products/' . $request->image->hashName()));
+
+            $request_data['image'] = $request->image->hashName();
+        }
+
+        $product ->  update ($request_data);
+
+        session() -> flash('success', 'Updated successfully');
+
+        return redirect()->route('dashboard.products.index');
+    } // end of update
+
+   
+    public function destroy(Product $product)
+    {
+        if ($product->image !== "default.png") {
+            Storage::disk('public_upload')->delete('/products/' . $product->image);
+        }
+
+        $product->delete();
+
+        session()->flash('success', 'Delete has been successfully');
+
+        return redirect()->route('dashboard.products.index');
+    } // end of destroy
 }

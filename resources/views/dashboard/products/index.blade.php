@@ -1,126 +1,142 @@
-@extends('admin.layouts.app')
+@extends('dashboard.layouts.app')
 
 @section('title')
-admins
+Products
 @stop()
 
 @section('content')
 
-   <!-- Page Header Start -->
-   <section class="page--header">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <!-- Page Title Start -->
-                            <h2 class="page--title h5">Admins</h2>
-                            <!-- Page Title End -->
 
-                            <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="ecommerce.html">Ecommerce</a></li>
-                                <li class="breadcrumb-item active"><span>Admins</span></li>
-                            </ul>
+<!-- Main Content Start -->
+<section class="main--content">
+    <div class="panel">
+
+        <!-- Page Header Start -->
+        <section class="page--header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <!-- Page Title Start -->
+                        <h2 class="page--title h5">Products</h2>
+                        <!-- Page Title End -->
+
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard.home') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item active"><span>products</span> <span>{{ $products -> total() }}</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-7 " id="search_pro">
+
+                        <div class="d-flex justify-content-end align-items-center">
+
+                            <!-- Navbar Search Start -->
+
+                            <div class="navbar--search">
+                                <form action="{{ route('dashboard.products.index') }}" action="get">
+                                    <div class="row">
+
+                                        <div class="col-md-6">
+
+                                            <select name="category_id" class="form-control" id="">
+                                                <option value=""> All categories </option>
+                                                @foreach ($categories as $category)
+                                                <option value="{{ $category -> id }}"
+                                                 {{ request() -> category_id == $category -> id ? "selected" : "" }} > {{ $category -> name }} </option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+
+                                        <div class="col-md-6"> <input type="search" name="search" value="{{ request() -> search }}" class="form-control" placeholder="Search Something..."> <button class="btn-link"><i class="fa fa-search"></i></button></div>
+
+                                    </div>
+
+                                </form>
+                            </div>
+                            <!-- Navbar Search End -->
+                            <div class="">
+
+                                @if (auth () -> user () -> hasPermission ('products_create'))
+                                <a href="{{ route ('dashboard.products.create') }}" class="btn btn-rounded btn-warning fw--600 ">Add New</a>
+                                @else
+                                <a href="#" class="btn btn-rounded btn-warning fw--600 disabled">Add New</a>
+                                @endif
+                            </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Page Header End -->
+    </div>
 
-                        <div class="col-lg-6">
-                            <!-- Summary Widget Start -->
-                            <div class="summary--widget">
-                                <div class="summary--item">
-                                    <p class="summary--chart" data-trigger="sparkline" data-type="bar" data-width="5" data-height="38" data-color="#009378">2,9,7,9,11,9,7,5,7,7,9,11</p>
 
-                                    <p class="summary--title">This Month</p>
-                                    <p class="summary--stats text-green">2,371,527</p>
-                                </div>
 
-                                <div class="summary--item">
-                                    <p class="summary--chart" data-trigger="sparkline" data-type="bar" data-width="5" data-height="38" data-color="#e16123">2,3,7,7,9,11,9,7,9,11,9,7</p>
+    @if (! empty($products) && $products -> count() > 0)
+    <div class="panel">
 
-                                    <p class="summary--title">Last Month</p>
-                                    <p class="summary--stats text-orange">2,527,371</p>
+        <!-- Records List Start -->
+        <div class="records--list px-2" data-title="Listing">
+            <table id="recordsListView">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Product Name</th>
+                        <th>Purchase Price</th>
+                        <th>Sale Price</th>
+                        <th>Profit </th>
+                        <th>Stock</th>
+                        <th>Image</th>
+                        <th class="not-sortable">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($products as $key => $product)
+                    <tr>
+                        <td>
+                            {{ $loop->iteration }}
+                        </td>
+                        <td>{{ $product -> name }} </td>
+                        <td> {{ $product -> purchase_price }} </td>
+                        <td> {{ $product -> sale_price }} </td>
+                        <td> {{ $product -> profit_percent }} </td>
+                        <td> {{ $product -> stock }} </td>
+                        <td> <img src="{{ $product -> image_path }}" width="80" class="thumbnail" alt=""> </td>
+                        <td>
+                            <div class="dropleft">
+
+                                <a href="#" class="btn-link" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></a>
+                                <div class="dropdown-menu">
+                                    @if (auth() -> user () -> hasPermission ('products_update'))
+                                    <a href="{{ route('dashboard.products.edit', $product -> id ) }}" class="dropdown-item">Edit</a>
+                                    @else
+                                    <a href="#" class="dropdown-item disabled">Edit</a>
+                                    @endif
+                                    @if (auth() -> user () ->hasPermission ('products_delete'))
+                                    <form action="{{ route('dashboard.products.destroy', $product -> id) }}" method="post">
+                                        @csrf
+                                        @method('delete')
+                                        <button type="submit" class="dropdown-item delete">Delete</button>
+                                    </form>
+                                    @else
+                                    <button type="submit" href="#" disabled class="dropdown-item">Delete</button>
+                                    @endif
                                 </div>
                             </div>
-                            <!-- Summary Widget End -->
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <!-- Page Header End -->
-
-            <!-- Main Content Start -->
-            <section class="main--content">
-                <div class="panel">
-                    <!-- Records Header Start -->
-                    <div class="records--header">
-                        <!-- <div class="title fa-shopping-bag">
-                            <h3 class="h3">Ecommerce Products <a href="#" class="btn btn-sm btn-outline-info">Manage Products</a></h3>
-                            <p>Found Total 1,330 Products</p>
-                        </div> -->
-
-                        <div class="actions">
-                            <form action="#" class="search flex-wrap flex-md-nowrap">
-                                <input type="text" class="form-control" placeholder="Product Name..." required>
-                                <select name="select" class="form-control">
-                                    <option value="" selected>Admin</option>
-                                </select>
-                                <button type="submit" class="btn btn-rounded"><i class="fa fa-search"></i></button>
-                            </form>
-
-                            <a href="#" class="addProduct btn btn-lg btn-rounded btn-warning">Add </a>
-                        </div>
-                    </div>
-                    <!-- Records Header End -->
-                </div>
-
-                <div class="panel">
-                    <!-- Records List Start -->
-                    <div class="records--list" data-title="Product Listing">
-                        <table id="recordsListView">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th class="not-sortable">Image</th>
-                                    <th>Admin Name</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th>Created Date</th>
-                                    <th class="not-sortable">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <a href="#" class="btn-link">#315321</a>
-                                    </td>
-                                    <td>
-                                        <a href="#" class="btn-link">
-                                            <img src="assets/img/products/thumb-80x60.jpg" alt="">
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="#" class="btn-link">Baby Dress</a>
-                                    </td>
-                                    <td>12 June 2017</td>
-                                    <td>12 June 2017</td>
-                                    <td>
-                                        <span class="label label-success">Approved</span>
-                                    </td>
-                                    <td>
-                                        <div class="dropleft">
-                                            <a href="#" class="btn-link" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></a>
-
-                                            <div class="dropdown-menu">
-                                                <a href="#" class="dropdown-item">Edit</a>
-                                                <a href="#" class="dropdown-item">Delete</a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- Records List End -->
-                </div>
-            </section>
-            <!-- Main Content End -->
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            {{ $products -> appends (request() -> query()) -> links() }}
+            @else
+            <h3> No data found !!! </h3>
+            @endif
+        </div>
+        <!-- Records List End -->
+    </div>
+</section>
+<!-- Main Content End -->
 
 @endsection()

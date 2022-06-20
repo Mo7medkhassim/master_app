@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="en" class="no-outlines">
+<html lang="{{ app()->getLocale() }}" dir="ltr" class="no-outlines">
 
 <head>
 
@@ -8,12 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- ==== Document Title ==== -->
-    <title>@yield('title')</title>
+    <title>{{ config('app.name') }}</title>
 
     <!-- ==== Document Meta ==== -->
     <meta name="author" content="">
     <meta name="description" content="">
     <meta name="keywords" content="">
+    <!-- CSRF Token -->
+    <!-- <meta name="csrf-token" content="{{ csrf_token() }}"> -->
 
     <!-- ==== Favicon ==== -->
     <link rel="icon" href="favicon.png" type="image/png">
@@ -41,8 +43,8 @@
     <link rel="stylesheet" href="{{asset('dashboard_asset/css/sweetalert-overrides.css')}}">
 
     {{--noty--}}
-    <link rel="stylesheet" href="{{ asset('dashboard_asset/plugin/noty/noty.css') }}">
-    <script src="{{ asset('dashboard_asset/plugin/noty/noty.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('dashboard_asset/plugins/noty/noty.css') }}">
+    <script src="{{ asset('dashboard_asset/plugins/noty/noty.min.js') }}"></script>
 
     <style>
         .res_flex {
@@ -53,6 +55,22 @@
             cursor: pointer;
         }
 
+        .pageloader {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: url('../dashboard_asset/img/ajax-loader.gif') 50% 50% no-repeat #2BB3C0;
+            opacity: 5;
+        }
+        #search_pro .navbar--search {
+            max-width: 768px !important;
+        }
+
+
+
         @media (max-width: 600px) {
             .res_flex {
                 flex-direction: column !important;
@@ -61,6 +79,10 @@
 
             .nav-tabs .nav-item {
                 width: 100%;
+            }
+
+            .m-account--content-w {
+                height: 300px
             }
         }
     </style>
@@ -207,6 +229,10 @@
     </div>
     <!-- Wrapper End -->
 
+    <!-- Loader End -->
+    <div class="pageloader"></div>
+    <!-- loader End -->
+
     <!-- Scripts -->
     <script src="{{asset('dashboard_asset/js/jquery.min.js')}}"></script>
     <script src="{{asset('dashboard_asset/js/jquery-ui.min.js')}}"></script>
@@ -225,8 +251,19 @@
     <script src="{{asset('dashboard_asset/js/ion.rangeSlider.min.js')}}"></script>
     <script src="{{asset('dashboard_asset/js/datatables.min.js')}}"></script>
     <script src="{{asset('dashboard_asset/js/main.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+    {{--ckeditor--}}
+    <script src="{{ asset('dashboard_asset/plugins/ckeditor/ckeditor.js') }}"></script>
+
+
+
 
     <script>
+        // loader
+        $(window).load(function() {
+            $(".pageloader").fadeOut("slow");
+        });
         // $('.delete').click(function(e) {
 
         //     var that = $(this);
@@ -250,7 +287,10 @@
         //     });
 
         // });
-         //end of delete
+        //end of delete
+
+        // ck editor direction
+        CKEDITOR.config.language = "{{ app()->getLocale() }}";
     </script>
 
     @yield('script')

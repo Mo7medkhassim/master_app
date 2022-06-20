@@ -141,11 +141,17 @@ return [
     |
     */
 
-    'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
-        ],
-    ],
+    // 'custom' => [
+    //     'attribute-name' => [
+    //         'rule-name' => 'custom-message',
+    //     ],
+    //     'ar' => [
+    //         'name' => 'الاسم باللغة العربية',
+    //     ],
+    //     'en' => [
+    //         'name' => 'الاسم باللغة الانجليزية',
+    //     ],
+    // ],
 
     /*
     |--------------------------------------------------------------------------
@@ -158,6 +164,15 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'ar' => [
+            'name' => 'name in arabic',
+            'description' => 'description in arabic',
+        ],
+        'en' => [
+            'name' => 'name in english',
+            'description' => 'description in english',
+        ],
+    ],
 
 ];

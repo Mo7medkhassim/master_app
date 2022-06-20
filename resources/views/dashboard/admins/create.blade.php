@@ -50,9 +50,7 @@ admins
             @endphp
 
 
-            <form method="post" action="{{ route('admins.store') }}" enctype="multipart/form-data">
-                @csrf
-                @method('post')
+            
                 <!-- Records List Start -->
                 <div class="col-md-12 mx-auto">
                     <!-- Panel Start -->
@@ -60,6 +58,10 @@ admins
                         <div class="panel-heading">
                             <h3 class="panel-title">Create New User</h3>
                         </div>
+
+                        <form method="post" action="{{ route('dashboard.admins.store') }}" enctype="multipart/form-data">
+                @csrf
+                @method('post')
 
                         <div class="panel-content">
                             <div class="row">
@@ -106,7 +108,6 @@ admins
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <span class="label-text ">Photo</span>
-
                                         <div class="">
                                             <label class="custom-file">
                                                 <input type="file" name="image" class="custom-file-input">
@@ -176,9 +177,11 @@ admins
                             </div>
                         </div>
                         <!-- Panel End -->
+
+                        </form>
                     </div>
                     <!-- Records List End -->
-            </form>
+            
         </div>
     </section>
 </section>

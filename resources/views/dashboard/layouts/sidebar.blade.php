@@ -1,5 +1,3 @@
-
-
 <aside class="sidebar" data-trigger="scrollbar">
     <!-- Sidebar Profile Start -->
     <div class="sidebar--profile">
@@ -64,12 +62,28 @@
                         </a>
 
                         <ul>
-                            <li><a href="{{ route('admins.index') }}">Users</a></li>
-                            <li><a href="{{ route('roles.index') }}">Rols</a></li>
+                            <li><a href="{{ route('dashboard.admins.index') }}">Users</a></li>
+                            <li><a href="{{ route('dashboard.roles.index') }}">Rols</a></li>
                             <li><a href="orders.html">Permission</a></li>
 
                         </ul>
                     </li>
+                    @endif
+                    @if(auth ()->user()-> hasPermission('categories_read'))
+
+                    <a href="#">
+
+                        </a>
+
+                    <li><a href="{{ route('dashboard.categories.index') }}"><i class="fa fa-shopping-cart"></i>
+                            <span>Categories</span> </a></li>
+
+                    @endif
+                    @if(auth ()->user()-> hasPermission('products_read'))
+
+                    <li><a href="{{ route('dashboard.products.index') }}"><i class="fa fa-shopping-cart"></i>
+                            <span>Products</span></a></li>
+
                     @endif
                     <li>
                         <a href="#">

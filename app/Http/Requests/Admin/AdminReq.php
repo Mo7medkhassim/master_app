@@ -6,21 +6,12 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class AdminReq extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
@@ -28,8 +19,8 @@ class AdminReq extends FormRequest
             'last_name' => 'required',
             'email' => 'required|email|unique:admins',
             'password' => 'required|confirmed',
-            // 'type' => 'required',
-            // 'role_id' => 'required',
+            'image' => 'image',
+            'permissions' => 'required|min:1',
         ];
     }
 }
