@@ -25,7 +25,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/former', function () {
+    return 123;
+});
 
-// Auth::routes(['register' => false]);
+Auth::routes(['register' => false]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/test1', [App\Http\Controllers\HomeController::class, 'test1'])->name('test1');
+Route::get('/test2', [App\Http\Controllers\HomeController::class, 'test2'])->name('test2');

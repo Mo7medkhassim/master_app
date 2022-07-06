@@ -234,6 +234,7 @@
     <!-- loader End -->
 
     <!-- Scripts -->
+
     <script src="{{asset('dashboard_asset/js/jquery.min.js')}}"></script>
     <script src="{{asset('dashboard_asset/js/jquery-ui.min.js')}}"></script>
     <script src="{{asset('dashboard_asset/js/bootstrap.bundle.min.js')}}"></script>
@@ -253,11 +254,17 @@
     <script src="{{asset('dashboard_asset/js/main.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 
+    <!-- ajax -->
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+   {{-- custom js --}}
+    <script src="{{asset('dashboard_asset/js/custom/order.js')}}"></script>
+
     {{--ckeditor--}}
     <script src="{{ asset('dashboard_asset/plugins/ckeditor/ckeditor.js') }}"></script>
 
-
-
+    {{--jquerynumber--}}
+    <script src="{{ asset('dashboard_asset/plugins/jquery.number.min.js') }}"></script>
 
     <script>
         // loader

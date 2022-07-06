@@ -97,7 +97,7 @@ Products
                                     <div class="form-group">
                                         <label>
                                             <span class="label-text">Purches price<span class="text-danger">*</span></span>
-                                            <input type="number" name="purchase_price"  value="{{ old('purchase_price') }}" class="form-control">
+                                            <input type="number" name="purchase_price" step="0.01" value="{{ old('purchase_price') }}" class="form-control">
                                         </label>
                                     </div>
                                 </div>
@@ -106,7 +106,7 @@ Products
                                     <div class="form-group">
                                         <label>
                                             <span class="label-text">Sale price<span class="text-danger">*</span></span>
-                                            <input type="number" name="sale_price"  value="{{ old('sale_price') }}" class="form-control">
+                                            <input type="number" name="sale_price" step="0.01"  value="{{ old('sale_price') }}" class="form-control">
                                         </label>
                                     </div>
                                 </div>

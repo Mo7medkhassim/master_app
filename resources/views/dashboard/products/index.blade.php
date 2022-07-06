@@ -41,8 +41,7 @@ Products
                                             <select name="category_id" class="form-control" id="">
                                                 <option value=""> All categories </option>
                                                 @foreach ($categories as $category)
-                                                <option value="{{ $category -> id }}"
-                                                 {{ request() -> category_id == $category -> id ? "selected" : "" }} > {{ $category -> name }} </option>
+                                                <option value="{{ $category -> id }}" {{ request() -> category_id == $category -> id ? "selected" : "" }}> {{ $category -> name }} </option>
                                                 @endforeach
                                             </select>
 
@@ -131,7 +130,9 @@ Products
             </table>
             {{ $products -> appends (request() -> query()) -> links() }}
             @else
-            <h3> No data found !!! </h3>
+            <div class="panel p-5">
+                <h5> No records ! </h5>
+            </div>
             @endif
         </div>
         <!-- Records List End -->

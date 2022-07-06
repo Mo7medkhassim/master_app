@@ -20,20 +20,21 @@ class Admin extends Authenticatable
 
     ];
 
-    protected $append = ['image_path'];
+    protected $append = ['full_name','image_path'];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
+    public function getFullNameAttribute () {
+
+        return $this->first_name . ' '. $this->last_name;;
+    } // end of user name
+
     public function getImagePathAttribute() {
 
         return asset('uploads/users/'. $this->image);
     } // end of image path
-}
+
+} // end of model

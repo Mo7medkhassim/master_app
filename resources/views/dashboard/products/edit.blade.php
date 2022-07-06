@@ -100,7 +100,7 @@ Categories
                                     <div class="form-group">
                                         <label>
                                             <span class="label-text">Purchase price<span class="text-danger">*</span></span>
-                                            <input type="number" name="purchase_price" required value="{{ $product -> purchase_price }}" class="form-control">
+                                            <input type="number" name="purchase_price" step="0.01" required value="{{ $product -> purchase_price }}" class="form-control">
                                         </label>
                                     </div>
                                 </div>
@@ -109,7 +109,7 @@ Categories
                                     <div class="form-group">
                                         <label>
                                             <span class="label-text">Sale price<span class="text-danger">*</span></span>
-                                            <input type="number" name="sale_price" required value="{{ $product -> sale_price }}" class="form-control">
+                                            <input type="number" name="sale_price" step="0.01" required value="{{ $product -> sale_price }}" class="form-control">
                                         </label>
                                     </div>
                                 </div>

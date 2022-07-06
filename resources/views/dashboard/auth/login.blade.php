@@ -4,10 +4,10 @@
 
 <style>
     @media (max-width: 600px) {
-            .m-account--content-w {
-                height: 300px
-            }
+        .m-account--content-w {
+            height: 300px
         }
+    }
 </style>
 
 <div class="m-account-w" data-bg-img="assets/img/account/wrapper-bg.jpg">
@@ -35,6 +35,8 @@
                         </div>
                         <!-- Logo End -->
 
+
+
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
                             <label class="m-account--title">Login to your account</label>
@@ -45,8 +47,11 @@
                                         <i class="fas fa-user"></i>
                                     </div>
 
-                                    <input type="email" name="email" placeholder="Email" class="form-control" autocomplete="off" required>
+                                    <input type="email" name="email"  value="admin@gmail.com" class="form-control" autocomplete="off" > </br>
                                 </div>
+                                @error('email')
+                                <span class="text-danger mt-2">{{$message}}</span>
+                                @enderror
                             </div>
 
                             <div class="form-group">
@@ -55,14 +60,17 @@
                                         <i class="fas fa-key"></i>
                                     </div>
 
-                                    <input type="password" name="password" placeholder="Password" class="form-control" autocomplete="off" required>
+                                    <input type="password" name="password"  placeholder="Enter password 123" class="form-control" autocomplete="off" ></br>
                                 </div>
+                                @error('password')
+                                <span class="text-danger mt-2">{{$message}}</span>
+                                @enderror
                             </div>
 
                             <div class="m-account--actions">
-                                <a href="#" class="btn-link">Forgot Password?</a>
+                                <!-- <a href="#" class="btn-link">Forgot Password?</a> -->
 
-                                <button type="submit" class="btn btn-rounded btn-info">Login</button>
+                                <button type="submit" class="btn btn-rounded btn-info"> Login</button>
                             </div>
 
                             <!-- <div class="m-account--alt">

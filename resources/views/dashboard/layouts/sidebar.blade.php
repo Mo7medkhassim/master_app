@@ -54,10 +54,42 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    @if(auth ()->user()-> hasPermission('admins_read'))
+
+
+                    @if(auth ()->user()-> hasPermission('categories_read'))
+                    <li><a href="{{ route('dashboard.categories.index') }}"><i class="fa fa-shopping-cart"></i>
+                            <span>Categories</span> </a>
+                    </li>
+                    @endif
+                     <!-- end of categories -->
+
+                    @if(auth ()->user()-> hasPermission('products_read'))
+                    <l><a href="{{ route('dashboard.products.index') }}"><i class="fa fa-gift"></i>
+                            <span>Products</span></a>
+                    </li>
+                    @endif
+                     <!-- end of products -->
+
+
+
+                    @if(auth ()->user()-> hasPermission('clients_read'))
+                    <l><a href="{{ route('dashboard.clients.index') }}"><i class="fa fa-object-group"></i>
+                            <span>Clients</span></a>
+                    </li>
+                    @endif
+                     <!-- end of clients -->
+
+                    @if(auth ()->user()-> hasPermission('orders_read'))
+                    <l><a href="{{ route('dashboard.orders.index') }}"><i class="fa fa-book"></i>
+                            <span>Orders</span></a>
+                    </li>
+                    @endif
+                     <!-- end of clients -->
+
+                     @if(auth ()->user()-> hasPermission('admins_read'))
                     <li>
                         <a href="#">
-                            <i class="fa fa-shopping-cart"></i>
+                            <i class="fa fa-users"></i>
                             <span>User And Authentications</span>
                         </a>
 
@@ -69,22 +101,7 @@
                         </ul>
                     </li>
                     @endif
-                    @if(auth ()->user()-> hasPermission('categories_read'))
 
-                    <a href="#">
-
-                        </a>
-
-                    <li><a href="{{ route('dashboard.categories.index') }}"><i class="fa fa-shopping-cart"></i>
-                            <span>Categories</span> </a></li>
-
-                    @endif
-                    @if(auth ()->user()-> hasPermission('products_read'))
-
-                    <li><a href="{{ route('dashboard.products.index') }}"><i class="fa fa-shopping-cart"></i>
-                            <span>Products</span></a></li>
-
-                    @endif
                     <li>
                         <a href="#">
                             <i class="fa fa-shopping-cart"></i>

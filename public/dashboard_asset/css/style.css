@@ -3765,6 +3765,10 @@ tr:first-child > td > .fc-day-grid-event {
     -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
+.order .invoice--order {
+    margin-top: 0;
+}
+
 .invoice--order .table {
     background-color: #fff;
 }

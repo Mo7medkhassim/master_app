@@ -38,7 +38,7 @@ Categories
                             </div>
                             <!-- Navbar Search End -->
                             <div class="">
-                               
+
                                 @if (auth () -> user () -> hasPermission ('categories_create'))
                                 <a href="{{ route ('dashboard.categories.create') }}" class="btn btn-rounded btn-warning fw--600 ">Add New</a>
                                 @else
@@ -53,7 +53,7 @@ Categories
         <!-- Page Header End -->
     </div>
 
-    
+
 
     @if (! empty($categories) && $categories -> count() > 0)
     <div class="panel">
@@ -67,8 +67,7 @@ Categories
                         <th>Category Name</th>
                         <th>Products Counts</th>
                         <th>Related Products</th>
-                        <th>Status</th>
-                        
+
                         <th class="not-sortable">Actions</th>
                     </tr>
                 </thead>
@@ -80,18 +79,19 @@ Categories
                         </td>
                         <td>{{ $category -> name }} </td>
                         <td>{{ $category -> products -> count() }} </td>
-                        <td> <a href="{{ route('dashboard.products.index', ['category_id' => $category->id] ) }}" class="btn btn-info" >Products Related</a> </td>
-                        <td> Active </td>
+                        <td> <a href="{{ route('dashboard.products.index', ['category_id' => $category->id] ) }}" class="btn btn-outline-success btn-sm" >Products Related</a> </td>
                         <td>
                             <div class="dropleft">
 
                                 <a href="#" class="btn-link" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></a>
                                 <div class="dropdown-menu">
+
                                     @if (auth() -> user () -> hasPermission ('categories_update'))
                                     <a href="{{ route('dashboard.categories.edit', $category -> id ) }}" class="dropdown-item">Edit</a>
                                     @else
                                     <a href="#" class="dropdown-item disabled">Edit</a>
                                     @endif
+
                                     @if (auth() -> user () ->hasPermission ('categories_delete'))
                                     <form action="{{ route('dashboard.categories.destroy', $category -> id) }}" method="post">
                                         @csrf
@@ -113,7 +113,9 @@ Categories
         <!-- Records List End -->
     </div>
     @else
-    <h3> No data found ! </h3>
+    <div class="panel p-5">
+        <h5> No records ! </h5>
+    </div>
     @endif
 </section>
 <!-- Main Content End -->

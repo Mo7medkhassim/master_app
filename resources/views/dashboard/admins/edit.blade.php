@@ -45,7 +45,7 @@ admins
             @endif
 
             @php
-            $models = ['admins','categories', 'products','test'];
+            $models = ['admins','categories', 'products','clients','orders'];
             @endphp
 
 

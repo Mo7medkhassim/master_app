@@ -76,7 +76,7 @@ admins
                             {{ $key + 1 }}
                         </td>
                         <!-- <td><a href="#" class="btn-link"> <img src="assets/img/products/thumb-80x60.jpg" alt=""> </a></td> -->
-                        <td>{{ $admin -> first_name }} {{ $admin -> last_name }}</td>
+                        <td>{{ $admin -> full_name }}</td>
                         <td> {{ $admin -> email }} </td>
                         <td><img src="{{ $admin -> image_path }}" width="80" class="thumbnail" alt=""></td>
                         <td> {{ $admin -> created_at }} </td>
@@ -88,7 +88,7 @@ admins
                                     @if (auth() -> user () -> hasPermission ('admins_update'))
                                     <a href="{{ route('dashboard.admins.edit', $admin -> id) }}" class="dropdown-item">Edit</a>
                                     @else
-                                   
+
                                     <button type="submit" href="#" disabled class="dropdown-item">Edit</button>
                                     @endif
                                     @if (auth() -> user () ->hasPermission ('admins_delete'))
@@ -112,7 +112,9 @@ admins
         <!-- Records List End -->
     </div>
     @else
-    <h3> No data found ! </h3>
+    <div class="panel p-5">
+        <h5> No records ! </h5>
+    </div>
     @endif
 </section>
 <!-- Main Content End -->

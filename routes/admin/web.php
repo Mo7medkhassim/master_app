@@ -3,9 +3,7 @@
 
 
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\HomeController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
@@ -20,51 +18,56 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 */
 
 
-// Route::group(['prefix' => 'dashboard', 'name' => 'dashboard.'], function () {
-
 Route::group(
     [
         'prefix' => LaravelLocalization::setLocale(),
         'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
     ],
-    function () { 
+    function () {
         Route::name('dashboard.')->prefix('dashboard')->group(function () {
 
             Route::group(['namespace' => 'Auth', 'middleware' => ['guest']], function () {
                 Route::get('/login',  'LoginController@login');
             });
-        
-        
+
+
             Route::group(['middleware' => 'signGuard:admin'], function () {
-        
+
                 //
-                Route::match(['get', 'post'], '/home', 'HomeController@index')->name('home');
-        
+                Route::match(['get', 'post'], '/', 'HomeController@index')->name('home');
+
                 // Admin routes
-                Route::resource('admins', 'AdminController');
-        
-        
+                Route::resource('admins', 'AdminController')->except(['show']);
+
+                // Client with order routes
+                Route::resource('clients', 'ClientController')->except(['show']);
+                Route::resource('clients.orders', 'Clients\OrderController')->except(['show']);
+
+                // Order routes
+                Route::resource('orders', 'OrderController')->except(['show']);
+                Route::get('/order/{order}/products', 'OrderController@products')->name('orders.products');
+
                 // Role routes
                 Route::resource('roles', 'RoleController')->except(['show']);
-        
+
                 // Category routes
                 Route::resource('categories', 'CategoryController')->except(['show']);
-        
+
                 // product routes
                 Route::resource('products', 'ProductController')->except(['show']);
-        
+
                 // Invoice Route
                 Route::resource('invoice', 'InvoicesController')->except(['show']);
             });
         });
-        
+
 
     }
 );
 
 
 
-Route::resource('admin/section', SectionController::class);
+// Route::resource('admin/section', SectionController::class);
 
 Auth::routes(['register' => false]);
 
@@ -72,5 +75,3 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

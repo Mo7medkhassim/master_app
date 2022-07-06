@@ -46,11 +46,11 @@ admins
             @endif
 
             @php
-            $models = ['admins','categories', 'products','test'];
+            $models = ['admins','categories', 'products','clients','orders'];
             @endphp
 
 
-            
+
                 <!-- Records List Start -->
                 <div class="col-md-12 mx-auto">
                     <!-- Panel Start -->
@@ -181,7 +181,7 @@ admins
                         </form>
                     </div>
                     <!-- Records List End -->
-            
+
         </div>
     </section>
 </section>
